@@ -60,9 +60,13 @@
 				</div>
 			</nav>
 		</header>
-		<!-- <main role="main" class="container"> -->
-			<!-- <div class="row"> -->
-				<!-- <div class="col-md-12"> -->
+		{% if containerable %} <!-- so that child template can change layout-->
+			<main role="main" class="container">
+				<div class="row">
+					<div class="col-md-12">
+		{% else %}
+			<main>
+		{% endif %}
 					{% with messages = get_flashed_messages(with_categories=true) %}
 					  {% if messages %}
 						{% for category, message in messages %}
@@ -73,9 +77,13 @@
 					  {% endif %}
 					{% endwith %}
 					{% block content %}{% endblock %}
-				  <!-- </div> -->
-			<!-- </div> -->
-		<!-- </main> -->
+		{% if containerable %}
+					</div>
+				</div>
+			</main>
+		{% else %}
+			</main>
+		{% endif%}
 	<!-- Footer -->
 <footer class="text-center text-lg-start bg-footer footer-text">
 	<!-- Section: Social media -->
