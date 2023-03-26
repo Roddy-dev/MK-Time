@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+{% set containerable = True %}
+{% block content %}
+<div class="content-section">
+    <form method="POST" action="" enctype="multipart/form-data">
+		{{ form.hidden_tag() }}
+		<!-- for csrf stuff-->
+		<fieldset class="form-group">
+			<legend class="border-bottom mb-4">{{ legend }}</legend>
+			<div class="form-group">
+				{{ form.name.label(class="form-control-label") }} 
+                {% if form.name.errors %}
+                    {{ form.name(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.name.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor%}
+                    </div>
+                {% else %}
+                    {{ form.name(class="form-control form-control-lg") }}
+                {% endif %}
+			</div>
+			<div class="form-group">
+				{{ form.description.label(class="form-control-label") }} 
+                {% if form.description.errors %}
+                    {{ form.description(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.description.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor%}
+                    </div>
+                {% else %}
+                    {{ form.description(class="form-control form-control-lg") }}
+                {% endif %}
+			</div>
+            <div class="form-group">
+				{{ form.price.label(class="form-control-label") }} 
+                {% if form.price.errors %}
+                    {{ form.price(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.price.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor%}
+                    </div>
+                {% else %}
+                    {{ form.price(class="form-control form-control-lg") }}
+                {% endif %}
+			</div>
+            <div class="form-group">
+				{{ form.gender.label(class="form-control-label") }} 
+                {% if form.gender.errors %}
+                    {{ form.gender(class="form-control form-control-lg is-invalid") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.gender.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor%}
+                    </div>
+                {% else %}
+                    {{ form.gender(class="form-control form-control-lg") }}
+                {% endif %}
+			</div>
+            <div class="form-group">
+                {{ form.picture.label() }}
+                {{ form.picture(class="form-control-file") }}
+                {% if form.picture.errors %}
+                    {% for error in form.picture.errors %}
+                        <span class="text-danger">{{ error }}</span>
+                    {% endfor %}
+                {% endif %}
+            </div>
+            <div class="form-check">
+				{{ form.in_stock(class="form-check-input") }}
+				{{ form.in_stock.label(class="form-check-label") }}
+			</div>
+		</fieldset>
+		<div class="form-group">
+			{{ form.submit(class="btn btn-outline-info") }}
+		</div>
+	</form>
+</div>
+{% endblock content %} 

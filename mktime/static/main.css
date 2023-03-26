@@ -25,6 +25,14 @@ h6 {
 	color: #03071e;
 }
 
+.about-text {
+	color: #556162;
+}
+
+.about-text h1 {
+	color: #d92e1c;
+}
+
 .site-header .navbar-nav .nav-link {
 	color: #cbd5db;
 }
@@ -93,10 +101,17 @@ a.article-title:hover {
 }
 
 /* taken from https://codepen.io/eversionsystems/pen/YOmqdj */
-/*  */
+/*  changed to be 93% of viewport in mktime.js*/
+
+.jumbotron-home-img {
+	background-image: url("./hero.jpg");
+}
+
+.jumbotron-about-img {
+	background-image: url("./about_us.jpg");
+}
 .jumbotron {
 	color: white;
-	background-image: url("./hero.jpg");
 	margin-top: 0;
 	margin-bottom: 0;
 	background-position: center;

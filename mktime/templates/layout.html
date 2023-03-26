@@ -63,9 +63,9 @@
 		{% if containerable %} <!-- so that child template can change layout-->
 			<main role="main" class="container">
 				<div class="row">
-					<div class="col-md-12">
+					<div class="col-md-12 mt-5">
 		{% else %}
-			<main>
+			<main> 
 		{% endif %}
 					{% with messages = get_flashed_messages(with_categories=true) %}
 					  {% if messages %}
@@ -168,7 +168,7 @@
 			  <a href="#!" class="text-reset">FAQ</a>
 			</p>
 			<p>
-			  <a href="#!" class="text-reset">Warrenty</a>
+			  <a href="#!" class="text-reset">Warranty</a>
 			</p>
 			<p>
 			  <a href="#!" class="text-reset">Some other info</a>

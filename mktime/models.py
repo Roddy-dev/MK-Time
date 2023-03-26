@@ -28,3 +28,15 @@ class Post(db.Model):
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}')"
 
+class Product(db.Model):
+    id =db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(20), nullable=False)
+    description = db.Column(db.String(120), nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+    gender = db.Column(db.String(1))
+    image_file = db.Column(db.String(20), nullable=False, default='watch_default.jpg')
+    in_stock = db.Column(db.Boolean, nullable=False, default=True)
+
+    def __repr__(self):
+        return f"Product('{self.name}', '{self.description}', '{self.price}, {self.image_file})"
+    

@@ -3,28 +3,9 @@ import secrets
 from PIL import Image
 from flask import render_template, url_for, flash, redirect, request, abort
 from mktime import app, db, bcrypt
-from mktime.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
-from mktime.models import User, Post
+from mktime.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm, ProductForm
+from mktime.models import User, Post, Product
 from flask_login import login_user, current_user, logout_user, login_required
-
-products = [
-    {
-        'name': 'John Doe',
-        'description': 'the gentlemans choice',
-        'price': '£599.00',
-        'gender': 'm',
-        'image_file': '',
-        'in_stock': True
-    },
-    {
-        'name': 'Jane Doe',
-        'description': 'fit for a lady',
-        'price': '£399.00',
-        'gender': 'f',
-        'image_file': '',
-        'in_stock': True
-    }
-]
 
 @app.route("/")
 @app.route("/home")
@@ -34,8 +15,8 @@ def home():
 
 @app.route("/products")
 def products():
-    # products = Products.query.all()
-    return render_template('products.html', title='Products')
+    products = Product.query.all()
+    return render_template('products.html', title='Products', products=products)
 
 @app.route("/about")
 def about():
@@ -78,10 +59,10 @@ def logout():
 
 def save_picture(form_picture):
     # rename file to avoid conflicts
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/profile_pics',  picture_fn)
+    random_hex = secrets.token_hex(8) #make a random hex string
+    _, f_ext = os.path.splitext(form_picture.filename) # get the file extension and chuck original filename (._)
+    picture_fn = random_hex + f_ext #make new random file name and ext
+    picture_path = os.path.join(app.root_path, 'static/profile_pics',  picture_fn) #get the correct location
     # resize image 
     output_size = (125, 125)
     i = Image.open(form_picture)
@@ -89,6 +70,21 @@ def save_picture(form_picture):
     # save file with new name and size
     i.save(picture_path)
     return picture_fn
+
+def save_product_picture(form_picture):
+    # rename file to avoid conflicts
+    random_hex = secrets.token_hex(8) #make a random hex string
+    _, f_ext = os.path.splitext(form_picture.filename) # get the file extension and chuck original filename (._)
+    picture_fn = random_hex + f_ext #make new random file name and ext
+    picture_path = os.path.join(app.root_path, 'static/product_pics',  picture_fn) #get the correct location
+    # resize image 
+    output_size = (600, 600)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+    # save file with new name and size
+    i.save(picture_path)
+    return picture_fn
+
 
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
@@ -142,7 +138,7 @@ def update_post(post_id):
     elif request.method =='GET':
         form.title.data = post.title
         form.content.data = post.content
-    return render_template('create_post.html', title="Update Post", form=form, legend="Update Post")
+    return render_template('create_post.html', title="Update Post", image_file=image_file, form=form, legend="Update Post")
 
 @app.route("/post/<int:post_id>/delete", methods=['POST'])
 @login_required
@@ -155,5 +151,21 @@ def delete_post(post_id):
     flash('Your post has been deleted', 'success')
     return redirect(url_for('home'))
 
-
+# add new products, not protected route but should be
+@app.route('/admin/product/new', methods=['GET', 'POST'])
+@login_required
+def new_product():
+    form = ProductForm()
+    if form.validate_on_submit():
+        image_file = url_for('static', filename='product_pics/watch_default.jpg') #set default pic
+        if form.picture.data: #and if something different added change it
+            image_file = save_product_picture(form.picture.data)
+        product = Product(name=form.name.data, description=form.description.data, 
+                          price=form.price.data, gender=form.gender.data, image_file=image_file,
+                          in_stock=form.in_stock.data)
+        db.session.add(product)
+        db.session.commit()
+        flash('The Product has been created!', 'success')
+        return redirect(url_for('new_product'))
+    return render_template('create_product.html', title="New Product", form=form, legend="New Product")
 
