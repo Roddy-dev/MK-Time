@@ -5,6 +5,8 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextA
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from mktime.models import User, Product
 
+
+#below is all the definitions for forms instantiated in routes.py
 class RegistrationForm(FlaskForm):   # a reg form that inherits flaskform
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -48,7 +50,7 @@ class UpdateAccountForm(FlaskForm):   # a reg form that inherits flaskform
                 raise ValidationError('That email already exists. Please take another one')
 
 
-class PostForm(FlaskForm):
+class PostForm(FlaskForm): #validators for contact us
     title = StringField('Title', validators=[DataRequired()])
     content = TextAreaField('Content', validators=[DataRequired()])
     submit = SubmitField('Post')

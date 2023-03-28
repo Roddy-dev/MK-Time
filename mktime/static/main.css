@@ -31,10 +31,20 @@ h6 {
 
 .about-text h1 {
 	color: #d92e1c;
+	font-size: 6vw;
+}
+.about-text p {
+	font-size: 4vw;
+}
+
+.card-footer .btn-primary {
+	border-color: #7e150a;
+	background-color: #d92e1c !important;
 }
 
 .site-header .navbar-nav .nav-link {
 	color: #cbd5db;
+	font-size: 1.25rem;
 }
 
 .site-header .navbar-nav .nav-link:hover {
@@ -87,6 +97,10 @@ a.article-title:hover {
 	width: 25px;
 	height: 25px;
 	vertical-align: middle;
+}
+
+.article-height {
+	min-height: 50vh;
 }
 
 .account-img {

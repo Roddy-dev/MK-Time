@@ -7,29 +7,37 @@ from mktime.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostFor
 from mktime.models import User, Post, Product
 from flask_login import login_user, current_user, logout_user, login_required
 
+#if home route render home page
 @app.route("/")
 @app.route("/home")
 def home():
-    posts = Post.query.all()
-    return render_template('home.html', posts=posts)
+    return render_template('home.html')
 
+#if products route, get all products and render
 @app.route("/products")
 def products():
     products = Product.query.all()
     return render_template('products.html', title='Products', products=products)
 
+#if about route, render about page
 @app.route("/about")
 def about():
     return render_template('about.html', title='About')
 
+#if login route, different courses of action depending on method 
+#if auth, then redirect to home
+#if form.validate_on_submit can only happen on POST request
+#if ok go home/next
+#if fail, flash message
+#and if none of the above, must be a GET request to load the form
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
-    form = LoginForm()
-    if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        if user and bcrypt.check_password_hash(user.password, form.password.data):
+    form = LoginForm() #see forms.py for definition
+    if form.validate_on_submit(): #if passed validation rules in forms.py
+        user = User.query.filter_by(email=form.email.data).first() #find user
+        if user and bcrypt.check_password_hash(user.password, form.password.data): #check password matches db
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next') #if next is in url query string get args eg http://localhost:5000/login?next=%2Faccount
             return redirect(next_page) if next_page else redirect(url_for('home'))
@@ -37,6 +45,10 @@ def login():
             flash(f'Login unsuccessful, please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form)
 
+#if logged in redirect home
+#instantiate reg form
+#if orm.validate_on_submit, must be POST, so store user to db
+#else must be GET so render form
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
@@ -51,7 +63,7 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
-
+#if logout route then do logout on flask_login 
 @app.route("/logout")
 def logout():
     logout_user()
@@ -78,14 +90,16 @@ def save_product_picture(form_picture):
     picture_fn = random_hex + f_ext #make new random file name and ext
     picture_path = os.path.join(app.root_path, 'static/product_pics',  picture_fn) #get the correct location
     # resize image 
-    output_size = (600, 600)
+    output_size = (300, 300)
     i = Image.open(form_picture)
     i.thumbnail(output_size)
     # save file with new name and size
     i.save(picture_path)
     return picture_fn
 
-
+#view/change account details
+#GET = render form with logged in user used in form
+#POST and validated = save picture and save user to db
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
@@ -105,6 +119,7 @@ def account():
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     return render_template('account.html', title='Account', image_file=image_file, form=form)
 
+#CRUD operations for Post model
 @app.route('/post/new', methods=['GET', 'POST'])
 @login_required
 def new_post():
@@ -115,7 +130,7 @@ def new_post():
         db.session.commit()
         flash('Your post has been created!', 'success')
         return redirect(url_for('home'))
-    return render_template('create_post.html', title="New Post", form=form, legend="New Post")
+    return render_template('create_post.html', title="Contact Us", form=form, legend="Contact Us")
     
 @app.route("/post/<int:post_id>")
 def post(post_id):
@@ -151,11 +166,15 @@ def delete_post(post_id):
     flash('Your post has been deleted', 'success')
     return redirect(url_for('home'))
 
-# add new products, not protected route but should be
+#end of Post CRUD operations
+
+# add new products, not protected route but should be under normal use
+#if get request create form and render
+#if post request, validate form, save picture as thumb and write product to db
 @app.route('/admin/product/new', methods=['GET', 'POST'])
-@login_required
+@login_required 
 def new_product():
-    form = ProductForm()
+    form = ProductForm() 
     if form.validate_on_submit():
         image_file = url_for('static', filename='product_pics/watch_default.jpg') #set default pic
         if form.picture.data: #and if something different added change it
@@ -169,3 +188,10 @@ def new_product():
         return redirect(url_for('new_product'))
     return render_template('create_product.html', title="New Product", form=form, legend="New Product")
 
+#would normally be protected route to read posts
+#get all posts and render template
+@app.route("/admin/posts")
+@login_required
+def admin_posts():
+    posts = Post.query.all()
+    return render_template('admin_posts.html', posts=posts)

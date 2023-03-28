@@ -32,7 +32,7 @@ class Product(db.Model):
     id =db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), nullable=False)
     description = db.Column(db.String(120), nullable=False)
-    price = db.Column(db.Integer, nullable=False)
+    price = db.Column(db.Numeric(precision=6, scale=2), nullable=False)
     gender = db.Column(db.String(1))
     image_file = db.Column(db.String(20), nullable=False, default='watch_default.jpg')
     in_stock = db.Column(db.Boolean, nullable=False, default=True)

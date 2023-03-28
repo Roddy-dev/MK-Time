@@ -1,13 +1,16 @@
+<!-- want to have full sized image so container set here not in layout -->
+<!-- background image set in main.css with class .jumbotron-about-img  -->
 {% extends "layout.html" %}
 {% block content %}
 <div class="jumbotron jumbotron-fluid jumbotron-about-img">
     <div class="container">
         <div class="row">
-          <div class="col-sm about-text">
+          <!-- about-text stacks on mobile and text scales on width on all sizes -->
+          <div class="col-sm-12 col-lg about-text"> 
             <h1 class="display-2 mt-5">Why MK?</h1>
             <p class="mt-5 display-4">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam itaque praesentium commodi adipisci aspernatur aut maiores reprehenderit odio sed eum?</p>
           </div>
-          <div class="col-sm">
+          <div class="col-sm-12 col-lg">
           </div>
         </div>
     </div>

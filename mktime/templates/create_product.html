@@ -1,4 +1,5 @@
 {% extends "layout.html" %}
+<!-- get the layout to have a continer div -->
 {% set containerable = True %}
 {% block content %}
 <div class="content-section">
@@ -6,6 +7,9 @@
 		{{ form.hidden_tag() }}
 		<!-- for csrf stuff-->
 		<fieldset class="form-group">
+            <!-- legend passed from routes file -->
+            <!-- form created as a class in routes file -->
+            <!-- below is template for that class -->
 			<legend class="border-bottom mb-4">{{ legend }}</legend>
 			<div class="form-group">
 				{{ form.name.label(class="form-control-label") }} 
