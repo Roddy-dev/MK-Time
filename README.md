@@ -15,9 +15,12 @@ python
 
 then create db by typing
 
- from mktime import app, db
- app.app_context().push()
- db.create_all()
+ from mktime import app, db  
+ 
+ app.app_context().push(). 
+ 
+ db.create_all(). 
+ 
 
 each of the above commands should return without error, however you will be missing products and users.
 
