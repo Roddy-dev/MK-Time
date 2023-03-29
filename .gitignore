@@ -18,6 +18,10 @@ build/
 docs/_build/
 .vscode
 /__pycache__/
+venv/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
 
 # Coverage reports
 htmlcov/
